@@ -5,7 +5,7 @@
 
 1. Clone the repository
 ```
-git@github.com:bt-sync/connect-api.git
+git clone git@github.com:bt-sync/connect-api.git
 ```
 
 2. Install the module
