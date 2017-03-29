@@ -8,9 +8,13 @@ class Path:
         self.macro = macro
 
     def get_object(self):
-        return {
-            'macro': self.macro,
+        attrs = {
             'linux': self.linux,
             'win': self.win,
             'osx': self.osx
         }
+
+        if self.macro is not None:
+            attrs['macro'] = self.macro
+
+        return attrs

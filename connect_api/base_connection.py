@@ -15,7 +15,7 @@ def api_request(func):
         url = self._base_url + '/' + url
         responce = func(self, url, *args, **kwargs)
 
-        if responce.status_code > 400:
+        if responce.status_code >= 400:
             try:
                 r = responce.json()
             except JSONDecodeError:
