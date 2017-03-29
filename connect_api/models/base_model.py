@@ -4,7 +4,7 @@ from ..error import ModelException
 
 class BaseModel(BaseConnection):
     def __init__(self, api, data):
-        super().__init__(api._address, api._token)
+        super().__init__(api._address, api._token, api._verify)
         self._attrs = data if data else {}
 
     @property

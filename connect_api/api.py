@@ -1,10 +1,15 @@
+import requests
 from .base_connection import BaseConnection
 from .models import Agent, Group, Job
 
 
 class ConnectApi(BaseConnection):
-    def __init__(self, address, token):
-        super().__init__(address, token)
+    def __init__(self, address, token, verify=False):
+        super().__init__(address, token, verify)
+
+        if not verify:
+            from requests.packages.urllib3.exceptions import InsecureRequestWarning
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
     # Agents
     def get_agents(self):

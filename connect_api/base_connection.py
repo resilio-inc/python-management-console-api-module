@@ -10,6 +10,8 @@ def api_request(func):
         kwargs['headers'] = {
             'Authorization': 'Token ' + self._token
         }
+        kwargs['verify'] = self._verify
+
         url = self._base_url + '/' + url
         responce = func(self, url, *args, **kwargs)
 
@@ -25,10 +27,11 @@ def api_request(func):
 
 
 class BaseConnection:
-    def __init__(self, address, token):
+    def __init__(self, address, token, verify):
         self._token = token
         self._address = address
         self._base_url = address + BASE_API_URL
+        self._verify = verify
 
     # Request methods
     @api_request
