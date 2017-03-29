@@ -6,7 +6,8 @@ class Permission(Enum):
     DESTINATION = 'ro'
     READ_WRITE = 'rw'
     SOURCE = 'rw'
-    SELECTIVE = 'selective'
+    SELECTIVE_RO = 'sro'
+    SELECTIVE_RW = 'srw'
 
 
 class JobType(Enum):

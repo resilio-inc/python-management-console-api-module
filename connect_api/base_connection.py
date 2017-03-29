@@ -78,6 +78,12 @@ class BaseConnection:
     def _update_job(self, job_id, attrs):
         return self._put('/jobs/%d' % job_id, json=attrs)
 
+    def _get_agent_status(self, job_id, agent_id):
+        return self._get('/jobs/%d/agents/%d' % (job_id, agent_id))
+
+    def _get_agents_statuses(self, job_id):
+        return self._get('/jobs/%d/agents' % job_id)
+
 
     # Groups
     def _get_groups(self):

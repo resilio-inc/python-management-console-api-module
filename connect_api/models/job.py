@@ -42,6 +42,7 @@ class Job(BaseModel):
     def fetch(self):
         self._attrs = self._get_job(self.id)
 
+    # Scheduler
     def _set_sheduler_params(self, start, finish):
         if start is not None:
             self._attrs['scheduler']['start'] = start
@@ -90,6 +91,14 @@ class Job(BaseModel):
         }
         self._set_sheduler_params(start, finish)
 
+    # Triggers
     def add_trigger(self, type, attrs):
         self._attrs['triggers'][type] = attrs
+
+    # Agent status
+    def get_agents_statuses(self):
+        return self._get_agents_statuses(self.id)
+
+    def get_agent_status(self, agent_id):
+        return self._get_agent_status(self.id, agent_id)
 
