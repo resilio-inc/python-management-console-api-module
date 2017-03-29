@@ -35,9 +35,11 @@ class Job(BaseModel):
 
     def save(self):
         if not self.created:
-            self._attrs = self._create_job(self._attrs)
+            job_id = self._create_job(self._attrs)
+            self._attrs['id'] = job_id
         else:
-            self._attrs = self._update_job(self.id, self._attrs)
+            self._update_job(self.id, self._attrs)
+        self.fetch()
 
     def fetch(self):
         self._attrs = self._get_job(self.id)

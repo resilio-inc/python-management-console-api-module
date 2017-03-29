@@ -20,6 +20,9 @@ class ConnectApi(BaseConnection):
         attrs = self._get_agent(agent_id)
         return Agent(self, attrs)
 
+    def disconnect_agent(self, agent):
+        self._delete_agent(agent.id)
+
     # Groups
     def create_group(self, name, agents, description=''):
         attrs = {
@@ -27,9 +30,11 @@ class ConnectApi(BaseConnection):
             'description': description,
             'agents': [{'id': a.id} for a in agents]
         }
+        group_id = self._create_group(attrs)
 
-        attrs = self._create_group(attrs)
-        return Group(self, attrs)
+        group = Group(self, dict(id=group_id))
+        group.fetch()
+        return group
 
     def get_groups(self):
         groups_attrs = self._get_groups()
@@ -38,6 +43,9 @@ class ConnectApi(BaseConnection):
     def get_group(self, group_id):
         attrs = self._get_group(group_id)
         return Group(self, attrs)
+
+    def delete_group(self, group):
+        self._delete_group(group.id)
 
     # Jobs
     def new_job(self, type, name='', description=''):
@@ -56,3 +64,6 @@ class ConnectApi(BaseConnection):
     def get_job(self, job_id):
         attrs = self._get_job(job_id)
         return Job(self, attrs)
+
+    def delete_job(self, job):
+        self._delete_job(job.id)

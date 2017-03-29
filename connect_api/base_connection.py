@@ -15,14 +15,15 @@ def api_request(func):
         url = self._base_url + '/' + url
         responce = func(self, url, *args, **kwargs)
 
-        try:
-            r = responce.json()
-        except JSONDecodeError as j:
-            r = responce.text
+        if responce.status_code > 400:
+            try:
+                r = responce.json()
+            except JSONDecodeError:
+                r = responce.text
+            text = r['message'] if isinstance(r, dict) and 'message' in r else r
+            raise ApiError('Error {}: {}'.format(responce.status_code, text))
 
-        if 'code' in r and 'message' in r:
-            raise ApiError('Error {}: {}'.format(r['code'], r['message']))
-        return r
+        return responce
     return wrapper
 
 
@@ -50,51 +51,73 @@ class BaseConnection:
     def _delete(self, *args, **kwargs):
         return requests.delete(*args, **kwargs)
 
+    # Helpers
+    def _create(self, *args, **kwargs):
+        r = self._post(*args, **kwargs)
+        return r.headers['Location'] if 'Location' in r.headers else None
+
+    def _get_json(self, *args, **kwargs):
+        r = self._get(*args, **kwargs)
+        try:
+            return r.json()
+        except JSONDecodeError:
+            raise ApiError('Responce is not a json: ' + r.text)
 
     # Agents
     def _get_agents(self):
-        return self._get('/agents')
+        return self._get_json('/agents')
 
     def _get_agent(self, agent_id):
-        return self._get('/agents/%d' % agent_id)
+        return self._get_json('/agents/%d' % agent_id)
 
     def _update_agent(self, agent_id, attrs):
-        return self._put('/agents/%d' % agent_id, json=attrs)
+        self._put('/agents/%d' % agent_id, json=attrs)
 
     def _get_agent_config(self):
-        return self._get('/agents/config')
+        return self._get_json('/agents/config')
+
+    def _delete_agent(self, agent_id):
+        self._delete('/agents/%d' % agent_id)
 
 
     # Jobs
     def _get_jobs(self):
-        return self._get('/jobs')
+        return self._get_json('/jobs')
 
     def _get_job(self, job_id):
-        return self._get('/jobs/%d' % job_id)
+        return self._get_json('/jobs/%d' % job_id)
 
     def _create_job(self, attrs):
-        return self._post('/jobs', json=attrs)
+        location = self._create('/jobs', json=attrs)
+        return int(location.split('/')[-1])
 
     def _update_job(self, job_id, attrs):
-        return self._put('/jobs/%d' % job_id, json=attrs)
+        self._put('/jobs/%d' % job_id, json=attrs)
+
+    def _delete_job(self, job_id):
+        self._delete('/jobs/%d' % job_id)
 
     def _get_agent_status(self, job_id, agent_id):
-        return self._get('/jobs/%d/agents/%d' % (job_id, agent_id))
+        return self._get_json('/jobs/%d/agents/%d' % (job_id, agent_id))
 
     def _get_agents_statuses(self, job_id):
-        return self._get('/jobs/%d/agents' % job_id)
+        return self._get_json('/jobs/%d/agents' % job_id)
 
 
     # Groups
     def _get_groups(self):
-        return self._get('/groups')
+        return self._get_json('/groups')
 
     def _get_group(self, group_id):
-        return self._get('/groups/%d' % group_id)
+        return self._get_json('/groups/%d' % group_id)
 
     def _create_group(self, attrs):
-        return self._post('/groups', json=attrs)
+        location = self._create('/groups', json=attrs)
+        return int(location.split('/')[-1])
 
     def _update_group(self, group_id, attrs):
-        return self._put('/groups/%d' % group_id, json=attrs)
+        self._put('/groups/%d' % group_id, json=attrs)
+
+    def _delete_group(self, group_id):
+        self._delete('/groups/%d' % group_id)
         

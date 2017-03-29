@@ -7,6 +7,12 @@ class BaseModel(BaseConnection):
         super().__init__(api._address, api._token, api._verify)
         self._attrs = data if data else {}
 
+    def save(self):
+        raise NotImplementedError()
+
+    def fetch(self):
+        raise NotImplementedError()
+
     @property
     def created(self):
         return 'id' in self._attrs
