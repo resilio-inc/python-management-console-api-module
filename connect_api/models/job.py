@@ -1,6 +1,7 @@
 from .base_model import BaseModel
-from ..constants import Permission, SchedulerType
+from ..constants import Permission, SchedulerType, JobType
 from ..utils import Path
+from ..error import ApiError
 
 
 class Job(BaseModel):
@@ -10,8 +11,9 @@ class Job(BaseModel):
         if 'groups' not in self._attrs:
             self._attrs['groups'] = []
 
-        if 'triggers' not in self._attrs:
-            self._attrs['triggers'] = {}
+    @property
+    def type(self):
+        return JobType(self._attrs['type'])
 
     def __str__(self):
         return '{}[{}]'.format(self._attrs['name'])
@@ -94,8 +96,18 @@ class Job(BaseModel):
         self._set_sheduler_params(start, finish)
 
     # Triggers
-    def add_trigger(self, type, attrs):
-        self._attrs['triggers'][type] = attrs
+    def add_trigger(self, name, attrs):
+        assert self.type in [JobType.CONSOLIDATION, JobType.DISTRIBUTION], 'Job doesn\'t supports triggers'
+        assert name in ['pre_indexing', 'post_download', 'complete'], 'Invalid trigger name'
+
+        if 'triggers' not in self._attrs:
+            self._attrs['triggers'] = {}
+        self._attrs['triggers'][name] = attrs
+
+    def set_script(self, script):
+        assert self.type == JobType.SCRIPT, 'Only script job supports script'
+
+        self._attrs['script'] = script
 
     # Agent status
     def get_agents_statuses(self):
