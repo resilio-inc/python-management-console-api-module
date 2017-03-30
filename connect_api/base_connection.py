@@ -5,6 +5,7 @@ from json import JSONDecodeError
 
 BASE_API_URL = '/api/v1'
 
+
 def api_request(func):
     def wrapper(self, url, *args, **kwargs):
         kwargs['headers'] = {
@@ -54,7 +55,10 @@ class BaseConnection:
     # Helpers
     def _create(self, *args, **kwargs):
         r = self._post(*args, **kwargs)
-        return r.headers['Location'] if 'Location' in r.headers else None
+        if 'Location' in r.headers:
+            return int(r.headers['Location'].split('/')[-1])
+        else:
+            raise ApiError('Failed to create job: no Location header')
 
     def _get_json(self, *args, **kwargs):
         r = self._get(*args, **kwargs)
@@ -88,8 +92,7 @@ class BaseConnection:
         return self._get_json('/jobs/%d' % job_id)
 
     def _create_job(self, attrs):
-        location = self._create('/jobs', json=attrs)
-        return int(location.split('/')[-1])
+        return self._create('/jobs', json=attrs)
 
     def _update_job(self, job_id, attrs):
         self._put('/jobs/%d' % job_id, json=attrs)
@@ -112,8 +115,7 @@ class BaseConnection:
         return self._get_json('/groups/%d' % group_id)
 
     def _create_group(self, attrs):
-        location = self._create('/groups', json=attrs)
-        return int(location.split('/')[-1])
+        return self._create('/groups', json=attrs)
 
     def _update_group(self, group_id, attrs):
         self._put('/groups/%d' % group_id, json=attrs)

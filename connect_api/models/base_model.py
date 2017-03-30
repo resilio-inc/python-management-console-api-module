@@ -1,5 +1,5 @@
 from ..base_connection import BaseConnection
-from ..error import ModelException
+from ..error import ApiError
 
 
 class BaseModel(BaseConnection):
@@ -24,5 +24,5 @@ class BaseModel(BaseConnection):
     @property
     def id(self):
         if 'id' not in self._attrs:
-            raise ModelException('Not id field. The model is not saved.')
+            raise ApiError('Not id field. The model is not saved.')
         return self._attrs['id']
