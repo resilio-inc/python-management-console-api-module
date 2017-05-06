@@ -13,7 +13,7 @@ def api_request(func):
         }
         kwargs['verify'] = self._verify
 
-        url = self._base_url + '/' + url
+        url = self._base_url + url
         responce = func(self, url, *args, **kwargs)
 
         if responce.status_code >= 400:

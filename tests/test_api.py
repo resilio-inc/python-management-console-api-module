@@ -4,16 +4,15 @@ import json
 import time
 
 import context
-from connect_api import ConnectApi, Path
+from connect_api import ConnectApi, Path, JobType
 
 
-api = ConnectApi('http://localhost:8080', 'AAA')
+api = ConnectApi('https://localhost:8443', 'YYS7S5R3MGFTWF6CSJ74QY5IQOZ7IMJS')
 agents = api.get_agents()
 
 
 src_group = api.create_group('src.group', [agents[0]])
 dst_group = api.create_group('dst.group', agents[1:])
-print(src_group.attrs)
 
 jobs = api.get_jobs()
 
