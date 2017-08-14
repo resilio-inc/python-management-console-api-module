@@ -10,3 +10,7 @@ class Agent(BaseModel):
 
     def fetch(self):
         self._attrs = self._get_agent(self.id)
+
+    @property
+    def name(self):
+        return self._attrs['name']
