@@ -4,7 +4,7 @@ from ..error import ApiError
 
 class BaseModel(BaseConnection):
     def __init__(self, api, data):
-        super().__init__(api._address, api._token, api._verify)
+        super(BaseModel, self).__init__(api._address, api._token, api._verify)
         self._attrs = data if data else {}
 
     def save(self):

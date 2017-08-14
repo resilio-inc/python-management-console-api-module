@@ -3,7 +3,7 @@ from .base_model import BaseModel
 
 class Agent(BaseModel):
     def __init__(self, api, data):
-        super().__init__(api, data)
+        super(Agent, self).__init__(api, data)
 
     def __str__(self):
         return '{}[{}]'.format(self._attrs['name'], self._attrs['ip'])

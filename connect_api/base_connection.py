@@ -33,7 +33,7 @@ def api_request(func):
     return wrapper
 
 
-class BaseConnection:
+class BaseConnection(object):
     def __init__(self, address, token, verify):
         self._token = token
         self._address = address

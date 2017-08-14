@@ -5,7 +5,7 @@ from .models import Agent, Group, Job
 
 class ConnectApi(BaseConnection):
     def __init__(self, address, token, verify=False):
-        super().__init__(address, token, verify)
+        super(ConnectApi, self).__init__(address, token, verify)
 
         if not verify:
             from requests.packages.urllib3.exceptions import InsecureRequestWarning

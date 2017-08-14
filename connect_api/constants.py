@@ -24,3 +24,8 @@ class SchedulerType(Enum):
     HOURLY = 'hourly'
     DAILY = 'daily'
     WEEKLY = 'weekly'
+
+
+class JobStatus(Enum):
+    SYNCED = 'synced'
+    IN_PROGRESS = 'in-progress'

@@ -1,12 +1,12 @@
 from .base_model import BaseModel
-from ..constants import Permission, SchedulerType, JobType
+from ..constants import Permission, SchedulerType, JobType, JobStatus
 from ..utils import Path
 from ..error import ApiError
 
 
 class Job(BaseModel):
     def __init__(self, api, data):
-        super().__init__(api, data)
+        super(Job, self).__init__(api, data)
 
         if 'groups' not in self._attrs:
             self._attrs['groups'] = []
@@ -45,6 +45,10 @@ class Job(BaseModel):
 
     def fetch(self):
         self._attrs = self._get_job(self.id)
+
+    def is_synced(self):
+        self.fetch()
+        return self._attrs['status'] == JobStatus.SYNCED.value
 
     # Scheduler
     def _set_sheduler_params(self, start, finish):
