@@ -1,6 +1,11 @@
 import requests
 from .error import ApiError
-from json import JSONDecodeError
+
+
+try:
+    from json import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
 
 
 BASE_API_URL = '/api/v1'
