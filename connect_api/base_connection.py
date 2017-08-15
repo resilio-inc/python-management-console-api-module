@@ -111,6 +111,13 @@ class BaseConnection(object):
     def _get_agents_statuses(self, job_id):
         return self._get_json('/jobs/%d/agents' % job_id)
 
+    def _start_job(self, job_id, ignore_errors=False):
+        params = { 'ignore_errors': ignore_errors }
+        self._put('/jobs/%d/start' % job_id, params=params)
+
+    def _stop_job(self, job_id):
+        self._put('/jobs/%d/stop' % job_id)
+
 
     # Groups
     def _get_groups(self):

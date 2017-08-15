@@ -1,6 +1,8 @@
 
 class Path:
-    def __init__(self, path=None, macro='%FOLDERS_STORAGE%'):
+    FOLDERS_STORAGE = '%FOLDERS_STORAGE%'
+
+    def __init__(self, path=None, macro=None):
         self.linux = path if path else ''
         self.win = path if path else ''
         self.osx = path if path else ''

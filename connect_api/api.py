@@ -45,7 +45,8 @@ class ConnectApi(BaseConnection):
         return Group(self, attrs)
 
     def delete_group(self, group):
-        self._delete_group(group.id)
+        group_id = group.id if isinstance(group, Group) else group
+        self._delete_group(group_id)
 
     # Jobs
     def new_job(self, type, name='', description=''):

@@ -18,23 +18,6 @@ class Job(BaseModel):
     def __str__(self):
         return '{}[{}]'.format(self._attrs['name'])
 
-    def add_group(self, group, path, permission):
-        assert isinstance(path, Path)
-
-        group_job = {
-            'id': group.id,
-            'permission': permission.value,
-            'path': path.get_object()
-        }
-
-        self._attrs['groups'].append(group_job)
-
-    def add_source_group(self, group, path):
-        self.add_group(group, path, Permission.SOURCE)
-
-    def add_destination_group(self, group, path):
-        self.add_group(group, path, Permission.DESTINATION)
-
     def save(self):
         if not self.created:
             job_id = self._create_job(self._attrs)
@@ -57,6 +40,30 @@ class Job(BaseModel):
         completed = max(self._attrs['size_completed'] - self._attrs['size_total'], 0)
 
         return min(int((completed / expected) * 100), 100)
+
+    def stop(self):
+        self._stop_job(self.id)
+
+    # Groups
+    def add_group(self, group, path, permission):
+        assert isinstance(path, Path)
+
+        group_job = {
+            'id': group.id,
+            'permission': permission.value,
+            'path': path.get_object()
+        }
+
+        self._attrs['groups'].append(group_job)
+
+    def add_source_group(self, group, path):
+        self.add_group(group, path, Permission.SOURCE)
+
+    def add_destination_group(self, group, path):
+        self.add_group(group, path, Permission.DESTINATION)
+
+    def get_groups_ids(self):
+        return [g['id'] for g in self._attrs['groups']]
 
 
     # Scheduler
