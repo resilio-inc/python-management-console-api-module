@@ -47,8 +47,17 @@ class Job(BaseModel):
         self._attrs = self._get_job(self.id)
 
     def is_synced(self):
-        self.fetch()
         return self._attrs['status'] == JobStatus.SYNCED.value
+
+    def download_percent(self):
+        if self._attrs['size_total'] == 0:
+            return 0
+
+        expected = self._attrs['size_total'] * (self._attrs['agents_total'] - 1)
+        completed = max(self._attrs['size_completed'] - self._attrs['size_total'], 0)
+
+        return min(int((completed / expected) * 100), 100)
+
 
     # Scheduler
     def _set_sheduler_params(self, start, finish):
