@@ -30,3 +30,4 @@ class JobStatus(Enum):
     SYNCED = 'synced'
     IN_PROGRESS = 'in-progress'
     INDEXING = 'indexing'
+    ERROR = 'error'

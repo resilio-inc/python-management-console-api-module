@@ -48,6 +48,10 @@ class Job(BaseModel):
         self._stop_job(self.id)
 
     @property
+    def status(self):
+        return self._attrs['status']
+
+    @property
     def total_size(self):
         return self._attrs['size_total']
 
