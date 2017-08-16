@@ -41,8 +41,23 @@ class Job(BaseModel):
 
         return min(int((completed / expected) * 100), 100)
 
+    def is_indexing(self):
+        return self._attrs['size_total'] == 0 or self._attrs['status'] == JobStatus.INDEXING.value
+
     def stop(self):
         self._stop_job(self.id)
+
+    @property
+    def total_size(self):
+        return self._attrs['size_total']
+
+    @property
+    def total_files(self):
+        return self._attrs['files_total']
+
+    @property
+    def bytes_indexed(self):
+        return min(self._attrs['size_completed'], self._attrs['size_total'])
 
     # Groups
     def add_group(self, group, path, permission):

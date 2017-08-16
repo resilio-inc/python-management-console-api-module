@@ -29,3 +29,4 @@ class SchedulerType(Enum):
 class JobStatus(Enum):
     SYNCED = 'synced'
     IN_PROGRESS = 'in-progress'
+    INDEXING = 'indexing'
