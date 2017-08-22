@@ -68,3 +68,6 @@ class ConnectApi(BaseConnection):
 
     def delete_job(self, job):
         self._delete_job(job.id)
+
+    def test_connection(self):
+        self._get_jobs()

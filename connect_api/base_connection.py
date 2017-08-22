@@ -1,5 +1,5 @@
 import requests
-from .error import ApiError
+from .errors import *
 
 
 try:
@@ -19,7 +19,11 @@ def api_request(func):
         kwargs['verify'] = self._verify
 
         url = self._base_url + url
-        responce = func(self, url, *args, **kwargs)
+        
+        try:
+            responce = func(self, url, *args, **kwargs)
+        except requests.RequestException as e:
+            raise ApiConnectionError('Connection to server failed', e)
 
         if responce.status_code >= 400:
             try:
@@ -27,7 +31,11 @@ def api_request(func):
             except JSONDecodeError:
                 r = responce.text
             text = r['message'] if isinstance(r, dict) and 'message' in r else r
-            raise ApiError('Error {}: {}'.format(responce.status_code, text))
+
+            if responce.status_code == 401:
+                raise ApiUnauthorizedError(text)
+            else:
+                raise ApiError('status {}, {}'.format(responce.status_code, text))
 
         return responce
     return wrapper
@@ -69,8 +77,8 @@ class BaseConnection(object):
         r = self._get(*args, **kwargs)
         try:
             return r.json()
-        except JSONDecodeError:
-            raise ApiError('Responce is not a json: ' + r.text)
+        except JSONDecodeError as e:
+            raise ApiError('Responce is not a json: ' + r.text, e)
 
     # Agents
     def _get_agents(self):

@@ -1,7 +1,6 @@
 from .base_model import BaseModel
 from ..constants import Permission, SchedulerType, JobType, JobStatus
 from ..utils import Path
-from ..error import ApiError
 
 
 class Job(BaseModel):
