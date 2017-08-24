@@ -20,3 +20,12 @@ class Path:
             attrs['macro'] = self.macro
 
         return attrs
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return hash(self) == hash(other)
+        else:
+            return False
+
+    def __hash__(self):
+        return hash(self.linux) ^ hash(self.win) ^ hash(self.linux) ^ hash(self.macro)

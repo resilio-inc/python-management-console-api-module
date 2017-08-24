@@ -15,7 +15,10 @@ class Job(BaseModel):
         return JobType(self._attrs['type'])
 
     def __str__(self):
-        return '{}[{}]'.format(self._attrs['name'])
+        if not self.created:
+            return 'Unsaved job'
+        else:
+            return 'Job[{}]'.format(self.id)
 
     def save(self):
         if not self.created:
