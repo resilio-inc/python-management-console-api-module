@@ -14,3 +14,7 @@ class Agent(BaseModel):
     @property
     def name(self):
         return self._attrs['name']
+
+    @property
+    def deviceid(self):
+        return self._attrs['deviceid']

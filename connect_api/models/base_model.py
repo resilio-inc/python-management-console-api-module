@@ -26,3 +26,9 @@ class BaseModel(BaseConnection):
         if 'id' not in self._attrs:
             raise ApiError('No id field. The model is not saved.')
         return self._attrs['id']
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__) and self.created and other.created:
+            return self.id == other.id
+        else:
+            return False
