@@ -65,6 +65,20 @@ class Job(BaseModel):
     def bytes_indexed(self):
         return min(self._attrs['size_completed'], self._attrs['size_total'])
 
+    @property
+    def errors(self):
+        return self._attrs['errors']
+
+    @property
+    def down_speed(self):
+        return self._attrs['down_speed']
+
+    @property
+    def eta(self):
+        if 'eta' not in self._attrs:
+            return None
+        return self._attrs['eta']
+
     # Groups
     def add_group(self, group, path, permission):
         assert isinstance(path, Path)

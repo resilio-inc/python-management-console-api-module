@@ -18,3 +18,14 @@ class Agent(BaseModel):
     @property
     def deviceid(self):
         return self._attrs['deviceid']
+
+    @property
+    def online(self):
+        return self._attrs['online']
+
+    @property
+    def ip(self):
+        if 'ip' not in self._attrs:
+            return None
+        return self._attrs['ip']
+

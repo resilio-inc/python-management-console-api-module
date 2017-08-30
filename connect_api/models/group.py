@@ -18,3 +18,11 @@ class Group(BaseModel):
 
     def fetch(self):
         self._attrs = self._get_group(self.id)
+
+    @property
+    def name(self):
+        return self._attrs['name']
+
+    @property
+    def agents_relations(self):
+        return self._attrs['agents']
