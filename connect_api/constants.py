@@ -1,7 +1,4 @@
-from enum import Enum
-
-
-class Permission(Enum):
+class Permission:
     READ_ONLY = 'ro'
     DESTINATION = 'ro'
     READ_WRITE = 'rw'
@@ -10,14 +7,14 @@ class Permission(Enum):
     SELECTIVE_RW = 'srw'
 
 
-class JobType(Enum):
+class JobType:
     SYNC = 'sync'
     DISTRIBUTION = 'distribution'
     CONSOLIDATION = 'consolidation'
     SCRIPT = 'script'
 
 
-class SchedulerType(Enum):
+class SchedulerType:
     NOW = 'now'
     ONCE = 'once'
     MANUALLY = 'manually'
@@ -26,7 +23,7 @@ class SchedulerType(Enum):
     WEEKLY = 'weekly'
 
 
-class JobStatus(Enum):
+class JobStatus:
     SYNCED = 'synced'
     IN_PROGRESS = 'in-progress'
     INDEXING = 'indexing'

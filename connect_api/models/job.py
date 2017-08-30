@@ -32,7 +32,7 @@ class Job(BaseModel):
         self._attrs = self._get_job(self.id)
 
     def is_synced(self):
-        return self._attrs['status'] == JobStatus.SYNCED.value
+        return self._attrs['status'] == JobStatus.SYNCED
 
     def download_percent(self):
         if self._attrs['size_total'] == 0:
@@ -44,7 +44,7 @@ class Job(BaseModel):
         return min(int((completed / expected) * 100), 100)
 
     def is_indexing(self):
-        return self._attrs['size_total'] == 0 or self._attrs['status'] == JobStatus.INDEXING.value
+        return self._attrs['size_total'] == 0 or self._attrs['status'] == JobStatus.INDEXING
 
     def stop(self):
         self._stop_job(self.id)
@@ -71,7 +71,7 @@ class Job(BaseModel):
 
         group_job = {
             'id': group.id,
-            'permission': permission.value,
+            'permission': permission,
             'path': path.get_object()
         }
 
@@ -96,33 +96,33 @@ class Job(BaseModel):
 
     def schedule_now(self, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.NOW.value
+            'type': SchedulerType.NOW
         }
         self._set_sheduler_params(start, finish)
 
     def schedule_once(self, time, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.ONCE.value,
+            'type': SchedulerType.ONCE,
             'time': time
         }
         self._set_sheduler_params(start, finish)
 
     def schedule_manually(self, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.MANUALLY.value
+            'type': SchedulerType.MANUALLY
         }
         self._set_sheduler_params(start, finish)
 
     def schedule_hourly(self, every, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.HOURLY.value,
+            'type': SchedulerType.HOURLY,
             'every': every
         }
         self._set_sheduler_params(start, finish)
 
     def schedule_daily(self, every, time, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.DAILY.value,
+            'type': SchedulerType.DAILY,
             'every': every,
             'time': time
         }
@@ -130,7 +130,7 @@ class Job(BaseModel):
 
     def schedule_weekly(self, days, time, start=None, finish=None):
         self._attrs['scheduler'] = {
-            'type': SchedulerType.WEEKLY.value,
+            'type': SchedulerType.WEEKLY,
             'days': days,
             'time': time
         }

@@ -49,9 +49,9 @@ class ConnectApi(BaseConnection):
         self._delete_group(group_id)
 
     # Jobs
-    def new_job(self, type, name='', description=''):
+    def new_job(self, job_type, name='', description=''):
         attrs = {
-            'type': type.value,
+            'type': job_type,
             'name': name,
             'description': description
         }
