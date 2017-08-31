@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import sys
-from distutils.core import setup
+from setuptools import setup
 
-if sys.version_info < (3, 0):
-    sys.exit('Python 2 is not supported')
+if sys.version_info < (2, 7):
+    sys.exit('Python 2.7 or higher is required')
 
 setup(
     name='connect-api',
