@@ -13,5 +13,11 @@ setup(
     author='Resilio Inc.',
     author_email='support@resilio.com',
     url='https://resilio.com',
-    packages=['connect_api', 'connect_api.models']
+    packages=[
+        'connect_api',
+        'connect_api.models'
+    ],
+    install_requires=[
+        'requests'
+    ]
 )
