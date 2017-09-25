@@ -26,3 +26,7 @@ class Group(BaseModel):
     @property
     def agents_relations(self):
         return self._attrs['agents']
+
+    @property
+    def agents_ids(self):
+        return [a['id'] for a in self._attrs['agents']]
