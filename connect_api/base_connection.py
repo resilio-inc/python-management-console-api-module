@@ -27,15 +27,17 @@ def api_request(func):
 
         if response.status_code >= 400:
             try:
-                r = response.json()
+                error_json = response.json()
+                message = error_json['message'] if 'message' in error_json else ''
+                data = error_json['data'] if 'data' in error_json else None
             except JSONDecodeError:
-                r = response.text
-            text = r['message'] if isinstance(r, dict) and 'message' in r else r
+                message = response.text
+                data = None
 
             if response.status_code == 401:
-                raise ApiUnauthorizedError(text)
+                raise ApiUnauthorizedError(message)
             else:
-                raise ApiError('status {}, {}'.format(response.status_code, text))
+                raise ApiError(message, status_code=response.status_code, data=data)
 
         return response
     return wrapper
