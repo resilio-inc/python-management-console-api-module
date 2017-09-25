@@ -1,3 +1,4 @@
+from datetime import datetime
 from .base_model import BaseModel
 from ..constants import Permission, SchedulerType, JobType, JobStatus
 from ..utils import Path
@@ -9,10 +10,6 @@ class Job(BaseModel):
 
         if 'groups' not in self._attrs:
             self._attrs['groups'] = []
-
-    @property
-    def type(self):
-        return JobType(self._attrs['type'])
 
     def __str__(self):
         if not self.created:
@@ -48,36 +45,6 @@ class Job(BaseModel):
 
     def stop(self):
         self._stop_job(self.id)
-
-    @property
-    def status(self):
-        return self._attrs['status']
-
-    @property
-    def total_size(self):
-        return self._attrs['size_total']
-
-    @property
-    def total_files(self):
-        return self._attrs['files_total']
-
-    @property
-    def bytes_indexed(self):
-        return min(self._attrs['size_completed'], self._attrs['size_total'])
-
-    @property
-    def errors(self):
-        return self._attrs['errors']
-
-    @property
-    def down_speed(self):
-        return self._attrs['down_speed']
-
-    @property
-    def eta(self):
-        if 'eta' not in self._attrs:
-            return None
-        return self._attrs['eta']
 
     # Groups
     def add_group(self, group, path, permission):
@@ -170,4 +137,65 @@ class Job(BaseModel):
 
     def get_agent_status(self, agent_id):
         return self._get_agent_status(self.id, agent_id)
+
+    @property
+    def type(self):
+        return self._attrs['type']
+
+    @property
+    def name(self):
+        return self._attrs['name']
+
+    @property
+    def description(self):
+        return self._attrs['description']
+
+    @property
+    def status(self):
+        return self._attrs['status']
+
+    @property
+    def total_size(self):
+        return self._attrs['size_total']
+
+    @property
+    def total_files(self):
+        return self._attrs['files_total']
+
+    @property
+    def bytes_indexed(self):
+        return min(self._attrs['size_completed'], self._attrs['size_total'])
+
+    @property
+    def errors(self):
+        return self._attrs['errors']
+
+    @property
+    def down_speed(self):
+        return self._attrs['down_speed']
+
+    @property
+    def eta(self):
+        if 'eta' not in self._attrs:
+            return None
+        return self._attrs['eta']
+
+    @property
+    def last_start_time(self):
+        return datetime.fromtimestamp(self._attrs['last_start_time'])
+
+    @property
+    def settings(self):
+        if 'settings' in self._attrs:
+            return self._attrs['settings']
+        else:
+            return {}
+
+    @property
+    def groups_relations(self):
+        return self._attrs['groups']
+
+    @property
+    def groups_ids(self):
+        return [g['id'] for g in self._attrs['groups']]
 

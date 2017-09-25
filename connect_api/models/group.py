@@ -24,9 +24,21 @@ class Group(BaseModel):
         return self._attrs['name']
 
     @property
+    def description(self):
+        return self._attrs['description']
+
+    @property
     def agents_relations(self):
         return self._attrs['agents']
 
     @property
     def agents_ids(self):
         return [a['id'] for a in self._attrs['agents']]
+
+    @property
+    def jobs_relations(self):
+        return self._attrs['jobs']
+
+    @property
+    def jobs_ids(self):
+        return [j['id'] for j in self._attrs['jobs']]

@@ -1,3 +1,4 @@
+from datetime import datetime
 from .base_model import BaseModel
 
 
@@ -29,3 +30,34 @@ class Agent(BaseModel):
             return None
         return self._attrs['ip']
 
+    @property
+    def group_relations(self):
+        return self._attrs['groups']
+
+    @property
+    def group_ids(self):
+        return [g['id'] for g in self._attrs['groups']]
+
+    @property
+    def status(self):
+        return self._attrs['status']
+
+    @property
+    def wan_enabled(self):
+        return self._attrs['wan_enabled']
+
+    @property
+    def last_seen(self):
+        return datetime.fromtimestamp(self._attrs['last_seen'])
+
+    @property
+    def os(self):
+        return self._attrs['os']
+
+    @property
+    def errors(self):
+        return self._attrs['errors']
+
+    @property
+    def tags(self):
+        return self._attrs['tags']

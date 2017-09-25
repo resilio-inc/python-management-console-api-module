@@ -28,3 +28,13 @@ class JobStatus:
     IN_PROGRESS = 'in-progress'
     INDEXING = 'indexing'
     ERROR = 'error'
+
+
+class AgentOS:
+    WIN32 = 'win32'
+    WIN64 = 'win64'
+    MAC = 'mac'
+    LINUX = 'linux'
+    ANDROID = 'android'
+    IOS = 'iOS'
+    WINDOWS_PHONE = 'Wp8'
