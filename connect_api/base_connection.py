@@ -21,23 +21,23 @@ def api_request(func):
         url = self._base_url + url
         
         try:
-            responce = func(self, url, *args, **kwargs)
+            response = func(self, url, *args, **kwargs)
         except requests.RequestException as e:
             raise ApiConnectionError('Connection to server failed', e)
 
-        if responce.status_code >= 400:
+        if response.status_code >= 400:
             try:
-                r = responce.json()
+                r = response.json()
             except JSONDecodeError:
-                r = responce.text
+                r = response.text
             text = r['message'] if isinstance(r, dict) and 'message' in r else r
 
-            if responce.status_code == 401:
+            if response.status_code == 401:
                 raise ApiUnauthorizedError(text)
             else:
-                raise ApiError('status {}, {}'.format(responce.status_code, text))
+                raise ApiError('status {}, {}'.format(response.status_code, text))
 
-        return responce
+        return response
     return wrapper
 
 
@@ -78,7 +78,7 @@ class BaseConnection(object):
         try:
             return r.json()
         except JSONDecodeError as e:
-            raise ApiError('Responce is not a json: ' + r.text, e)
+            raise ApiError('Response is not a json: ' + r.text, e)
 
     # Agents
     def _get_agents(self):
