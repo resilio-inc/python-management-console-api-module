@@ -38,3 +38,19 @@ class AgentOS:
     ANDROID = 'android'
     IOS = 'iOS'
     WINDOWS_PHONE = 'Wp8'
+
+    @classmethod
+    def is_windows(cls, os):
+        return os in [cls.WIN64, cls.WIN32]
+
+    @classmethod
+    def is_linux(cls, os):
+        return os == cls.LINUX
+
+    @classmethod
+    def is_mac(cls, os):
+        return os == cls.MAC
+
+    @classmethod
+    def is_mobile(cls, os):
+        return os in [cls.ANDROID, cls.IOS, cls.WINDOWS_PHONE]

@@ -8,7 +8,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name='connect-api',
-    version='0.0.2',
+    version='0.0.3',
     description='Resilio Connect API',
     author='Resilio Inc.',
     author_email='support@resilio.com',
