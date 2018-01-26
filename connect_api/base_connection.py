@@ -14,12 +14,13 @@ BASE_API_URL = '/api/v1'
 def api_request(func):
     def wrapper(self, url, *args, **kwargs):
         kwargs['headers'] = {
-            'Authorization': 'Token ' + self._token
+            'Authorization': 'Token ' + self._token,
+            'Content-Type': 'application/json'
         }
         kwargs['verify'] = self._verify
 
         url = self._base_url + url
-        
+
         try:
             response = func(self, url, *args, **kwargs)
         except requests.RequestException as e:
@@ -144,4 +145,3 @@ class BaseConnection(object):
 
     def _delete_group(self, group_id):
         self._delete('/groups/%d' % group_id)
-        
