@@ -172,7 +172,7 @@ class Job(BaseModel):
 
     @property
     def down_speed(self):
-        return self._attrs['down_speed']
+        return self._attrs['speed']
 
     @property
     def eta(self):
