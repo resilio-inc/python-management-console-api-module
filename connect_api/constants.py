@@ -15,19 +15,20 @@ class JobType:
 
 
 class SchedulerType:
-    NOW = 'now'
     ONCE = 'once'
     MANUALLY = 'manually'
+    MINUTES = 'minutes'
     HOURLY = 'hourly'
     DAILY = 'daily'
     WEEKLY = 'weekly'
 
 
-class JobStatus:
-    SYNCED = 'synced'
-    IN_PROGRESS = 'in-progress'
-    INDEXING = 'indexing'
-    ERROR = 'error'
+class JobRunStatus:
+    WORKING = 'working'
+    FINISHED = 'finished'
+    ABORTED = 'aborted'
+    TIMEOUT = 'timeout'
+    PAUSED = 'paused'
 
 
 class AgentOS:
