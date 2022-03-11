@@ -8,7 +8,7 @@ except ImportError:
     JSONDecodeError = ValueError
 
 
-BASE_API_URL = '/api/v1'
+BASE_API_URL = '/api/v2'
 
 
 def api_request(func):
@@ -24,7 +24,7 @@ def api_request(func):
         try:
             response = func(self, url, *args, **kwargs)
         except requests.RequestException as e:
-            raise ApiConnectionError('Connection to server failed', e)
+            raise ApiConnectionError('Connection to Management Console failed', e)
 
         if response.status_code >= 400:
             try:
@@ -45,6 +45,16 @@ def api_request(func):
 
 
 class BaseConnection(object):
+    """
+    Base class for interaction with Management Console API
+
+    Don't use it directly
+
+    See also
+    --------
+    ConnectApi
+    """
+
     def __init__(self, address, token, verify):
         self._token = token
         self._address = address
@@ -71,10 +81,10 @@ class BaseConnection(object):
     # Helpers
     def _create(self, *args, **kwargs):
         r = self._post(*args, **kwargs)
-        if 'Location' in r.headers:
-            return int(r.headers['Location'].split('/')[-1])
-        else:
-            raise ApiError('Failed to create job: no Location header')
+        try:
+            return r.json()['id']
+        except JSONDecodeError as e:
+            raise ApiError('Response is not a json: ' + r.text, e)
 
     def _get_json(self, *args, **kwargs):
         r = self._get(*args, **kwargs)
@@ -116,18 +126,27 @@ class BaseConnection(object):
     def _delete_job(self, job_id):
         self._delete('/jobs/%d' % job_id)
 
-    def _get_agent_status(self, job_id, agent_id):
-        return self._get_json('/jobs/%d/agents/%d' % (job_id, agent_id))
+    def _start_job(self, job_id):
+        params = { 'job_id': job_id }
+        return self._create('/runs', json=params)
 
-    def _get_agents_statuses(self, job_id):
-        return self._get_json('/jobs/%d/agents' % job_id)
 
-    def _start_job(self, job_id, ignore_errors=False):
-        params = { 'ignore_errors': ignore_errors }
-        self._put('/jobs/%d/start' % job_id, params=params)
+    # Job runs
+    def _get_job_run(self, job_run_id):
+        return self._get_json('/runs/%d' % job_run_id)
 
-    def _stop_job(self, job_id):
-        self._put('/jobs/%d/stop' % job_id)
+    def _get_last_job_run(self, job_id):
+        job_runs = self._get_json('/runs?limit=1&job_id=%d&sort=finish_time' % job_id)
+        return job_runs['data'][0] if len(job_runs['data']) else None
+
+    def _stop_job_run(self, job_run_id):
+        self._put('/runs/%d/stop' % job_run_id)
+
+    def _get_agent_status(self, job_run_id, agent_id):
+        return self._get_json('/runs/%d/agents/%d' % (job_run_id, agent_id))
+
+    def _get_agents_statuses(self, job_run_id):
+        return self._get_json('/runs/%d/agents' % job_run_id)
 
 
     # Groups
