@@ -57,6 +57,9 @@ class JobRun(BaseModel):
         if self._attrs['size_total'] == 0:
             return 0
 
+        if self._attrs['agents_total'] < 2:
+            return 100
+
         expected = self._attrs['size_total'] * (self._attrs['agents_total'] - 1)
         completed = max(self._attrs['size_completed'] - self._attrs['size_total'], 0)
 
@@ -73,17 +76,11 @@ class JobRun(BaseModel):
 
         Returns
         -------
-        dict
-            Dictionary of pairs agent-status in format {'agent_id': 'status', ...}
+        list
+            List of dicts with detailed agents status
         """
 
-        agents = self._get_agents_statuses(self.id)
-        statuses = {}
-
-        for a in agents:
-            statuses[str(a['id'])] = a['status']
-
-        return statuses
+        return self._get_agents_statuses(self.id)['data']
 
     def get_agent_status(self, agent_id):
         """
@@ -96,10 +93,10 @@ class JobRun(BaseModel):
 
         Returns
         -------
-        str
-            Status
+        dict
+            Detailed agent's status
         """
-        return self._get_agent_status(self.id, agent_id)['status']
+        return self._get_agent_status(self.id, agent_id)
 
     @property
     def status(self):

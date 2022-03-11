@@ -26,6 +26,9 @@ class Job(BaseModel):
         if 'groups' not in self._attrs:
             self._attrs['groups'] = []
 
+        if (self._attrs['type'] != JobType.SYNC) and ('scheduler' not in self._attrs):
+            self._attrs['scheduler'] = { 'type': SchedulerType.MANUALLY }
+
     def __str__(self):
         if not self.created:
             return 'Unsaved job'
@@ -45,7 +48,15 @@ class Job(BaseModel):
             job_id = self._create_job(self._attrs)
             self._attrs['id'] = job_id
         else:
-            self._update_job(self.id, self._attrs)
+            new_attrs = {}
+            update_attrs = ['name', 'description', 'groups', 'triggers', 'script',
+                'scheduler', 'settings', 'post_command_local_time', 'profile_id']
+
+            for a in update_attrs:
+                if a in self._attrs:
+                    new_attrs[a] = self._attrs[a]
+
+            self._update_job(self.id, new_attrs)
         self.fetch()
 
     def fetch(self):
@@ -162,6 +173,8 @@ class Job(BaseModel):
 
     # Scheduler
     def _set_scheduler_params(self, start, finish):
+        assert self._attrs['type'] != JobType.SYNC, 'Sync job does not support scheduler'
+
         if start is not None:
             self._attrs['scheduler']['start'] = start
         elif 'start' in self._attrs['scheduler']:
