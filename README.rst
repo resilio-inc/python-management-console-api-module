@@ -1,13 +1,51 @@
 Resilio Connect API python module
 =================================
 
+Steps to install the module (Ubuntu 20.04)
+--------
 
-Examples
+Install dependencies first
+
+.. code-block:: bash
+
+    sudo apt update
+    sudo apt install python3 python3-pip git
+    python3 -m pip install requests
+
+Clone repo
+
+.. code-block:: bash
+
+    git clone https://github.com/resilio-inc/python-management-console-api-module.git
+
+Build the module
+
+.. code-block:: bash
+
+    cd ./python-management-console-api-module
+    python3 setup.py build
+
+Install the module globally
+
+.. code-block:: bash
+
+    python3 setup.py install
+
+Check if the module has installed successfully
+
+.. code-block:: bash
+
+    python3 -m pip freeze | grep connect-api
+
+
+Usage examples
 --------
 
 Create group
 
 .. code-block:: python
+
+    from connect_api import ConnectApi
 
     api = ConnectApi('https://localhost:8443', '<API-token>')
     cloud_agents = []
@@ -23,6 +61,8 @@ Create group
 Create and start distribution job:
 
 .. code-block:: python
+
+    from connect_api import ConnectApi
 
     api = ConnectApi('https://localhost:8443', '<API-token>')
     agents = api.get_agents()
@@ -48,6 +88,8 @@ Create and start distribution job:
 Create consolidation job with scheduler:
 
 .. code-block:: python
+
+    from connect_api import ConnectApi
 
     api = ConnectApi('https://localhost:8443', '<API-token>')
     groups = api.get_groups()
@@ -75,6 +117,8 @@ Start a job run from previously created job:
 
 .. code-block:: python
 
+    from connect_api import ConnectApi
+
     api = ConnectApi('https://localhost:8443', '<API-token>')
     jobs = api.get_jobs()
 
@@ -86,6 +130,8 @@ Start a job run from previously created job:
 Get all agents and print errors:
 
 .. code-block:: python
+
+    from connect_api import ConnectApi
 
     api = ConnectApi('https://localhost:8443', '<API-token>')
     for a in api.get_agents():
