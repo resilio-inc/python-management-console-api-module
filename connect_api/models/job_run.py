@@ -157,3 +157,9 @@ class JobRun(BaseModel):
         """Download speed"""
 
         return self._attrs['down_speed']
+
+    @property
+    def errors(self):
+        """Errors"""
+
+        return self._attrs['errors']
