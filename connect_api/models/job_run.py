@@ -61,7 +61,7 @@ class JobRun(BaseModel):
             return 100
 
         expected = self._attrs['size_total'] * (self._attrs['agents_total'] - 1)
-        completed = max(self._attrs['size_completed'] - self._attrs['size_total'], 0)
+        completed = self._attrs['size_completed']
 
         return min(int((completed / expected) * 100), 100)
 
