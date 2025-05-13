@@ -212,21 +212,33 @@ class ConnectApi(BaseConnection):
 
         return Job(self, attrs)
 
-    def get_jobs(self):
+    def get_jobs(self, name=None, wildcard_name_pattern=None, is_active=None, ever_run=None):
         """
-        Get all job
+        Get all jobs
 
         Parameters
         ----------
-        None
+        name: str, optional
+        wildcard_name_pattern: str, optional
+        is_active: bool, optional
+        ever_run: bool, optional
 
         Returns
         -------
         list
             List of jobs as Job models
         """
+        params = {}
+        if name is not None:
+            params['name'] = name
+        if wildcard_name_pattern is not None:
+            params['wildcard_name_pattern'] = wildcard_name_pattern
+        if is_active is not None:
+            params['is_active'] = is_active
+        if ever_run is not None:
+            params['ever_run'] = ever_run
 
-        jobs_attrs = self._get_jobs()
+        jobs_attrs = self._get_json('/jobs', params=params)
         return [Job(self, attrs) for attrs in jobs_attrs]
 
     def get_job(self, job_id):

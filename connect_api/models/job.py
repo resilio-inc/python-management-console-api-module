@@ -26,6 +26,9 @@ class Job(BaseModel):
         if 'groups' not in self._attrs:
             self._attrs['groups'] = []
 
+        if 'settings' not in self._attrs:
+            self._attrs['settings'] = {}
+
         if (self._attrs['type'] != JobType.SYNC) and ('scheduler' not in self._attrs):
             self._attrs['scheduler'] = { 'type': SchedulerType.MANUALLY }
 
@@ -161,7 +164,7 @@ class Job(BaseModel):
 
     def get_groups_ids(self):
         """
-        Get list of group IDs partisipating in the job
+        Get list of group IDs participating in the job
 
         Parameters
         ----------
@@ -361,6 +364,15 @@ class Job(BaseModel):
         return self._attrs['errors']
 
     @property
+    def groups(self):
+        """
+        Groups in the job.
+        Note that these are NOT Group objects, but dicts with group attributes.
+        """
+
+        return self._attrs['groups']
+
+    @property
     def last_start_time(self):
         """Last start time"""
 
@@ -370,14 +382,11 @@ class Job(BaseModel):
     def settings(self):
         """Job settings"""
 
-        if 'settings' in self._attrs:
-            return self._attrs['settings']
-        else:
-            return {}
+        return self._attrs['settings']
 
     @property
     def groups_ids(self):
         """IDs of groups in the job"""
 
-        return [g['id'] for g in self._attrs['groups']]
+        return self.get_groups_ids()
 
