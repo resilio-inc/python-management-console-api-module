@@ -142,6 +142,12 @@ class BaseConnection(object):
     def _stop_job_run(self, job_run_id):
         self._put('/runs/%d/stop' % job_run_id)
 
+    def _pause_job_run(self, job_run_id):
+        self._put('/runs/%d/pause' % job_run_id)
+
+    def _resume_job_run(self, job_run_id):
+        self._put('/runs/%d/resume' % job_run_id)
+
     def _get_agent_status(self, job_run_id, agent_id):
         return self._get_json('/runs/%d/agents/%d' % (job_run_id, agent_id))
 

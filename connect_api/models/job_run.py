@@ -32,7 +32,7 @@ class JobRun(BaseModel):
         None
         """
 
-        self._attrs = self._get_job(self.id)
+        self._attrs = self._get_job_run(self.id)
 
     def stop(self):
         """
@@ -43,6 +43,30 @@ class JobRun(BaseModel):
         None
         """
         self._stop_job_run(self.id)
+
+    def pause(self):
+        """
+        Pause job run
+
+        Parameters
+        ----------
+        None
+        """
+        if not self.paused:
+            self._pause_job_run(self.id)
+            self.fetch()
+
+    def resume(self):
+        """
+        Resume job run
+
+        Parameters
+        ----------
+        None
+        """
+        if self.paused:
+            self._resume_job_run(self.id)
+            self.fetch()
 
     @property
     def is_synced(self):
@@ -64,6 +88,18 @@ class JobRun(BaseModel):
         completed = max(self._attrs['size_completed'] - self._attrs['size_total'], 0)
 
         return min(int((completed / expected) * 100), 100)
+
+    @property
+    def active(self):
+        """Is job run active"""
+
+        return self._attrs['active']
+
+    @property
+    def paused(self):
+        """Is job run paused"""
+
+        return self._attrs['status'] == JobRunStatus.PAUSED
 
     # Agent status
     def get_agents_statuses(self):
@@ -121,3 +157,9 @@ class JobRun(BaseModel):
         """Download speed"""
 
         return self._attrs['down_speed']
+
+    @property
+    def errors(self):
+        """Errors"""
+
+        return self._attrs['errors']
